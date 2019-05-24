@@ -47,6 +47,7 @@ if (isProduction) {
 
 //Add Models here
 require("./models/User");
+require("./models/Recipe");
 require("./config/passport");
 
 // Routes are required here

@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const secret = require("../config").secret;
 
+// Schemea for User
 const UserSchema = new mongoose.Schema(
   {
     username: {
@@ -32,6 +33,7 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.plugin(uniqueValidtor, { message: "is already taken." });
 
+// Securing Password
 UserSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString("hex");
   this.hash = crypto
@@ -39,6 +41,7 @@ UserSchema.methods.setPassword = function(password) {
     .toString("hex");
 };
 
+// Checking password
 UserSchema.methods.validPassword = function(password) {
   var hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
@@ -46,6 +49,7 @@ UserSchema.methods.validPassword = function(password) {
   return this.hash === hash;
 };
 
+// Genreate a JWT token
 UserSchema.methods.generateJWT = function() {
   var today = new Date();
   var exp = new Date(today);
@@ -61,6 +65,7 @@ UserSchema.methods.generateJWT = function() {
   );
 };
 
+// Check token
 UserSchema.methods.toAuthJSON = function() {
   return {
     username: this.username,
@@ -68,6 +73,16 @@ UserSchema.methods.toAuthJSON = function() {
     token: this.generateJWT(),
     bio: this.bio,
     image: this.image
+  };
+};
+
+// Profile Page output
+UserSchema.methods.toProfileJSONFor = function(user) {
+  return {
+    username: this.username,
+    bio: this.bio,
+    image: this.image || "http://i.imgur.com/AItCxSs.jpg",
+    following: false // we'll implement following functionality in a few chapters :)
   };
 };
 
