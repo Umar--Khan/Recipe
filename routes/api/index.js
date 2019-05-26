@@ -1,7 +1,10 @@
 var router = require("express").Router();
 
 router.use("/", require("./users"));
+// router.use("/profiles", require("./profiles"));
+router.use("/recipes", require("./recipes"));
 
+// Error Handling
 router.use(function(err, req, res, next) {
   if (err.name === "ValidationError") {
     return res.status(422).json({
@@ -12,7 +15,6 @@ router.use(function(err, req, res, next) {
       }, {})
     });
   }
-
   return next(err);
 });
 

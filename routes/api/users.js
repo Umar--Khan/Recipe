@@ -4,6 +4,8 @@ var passport = require("passport");
 var User = mongoose.model("User");
 var auth = require("../auth");
 
+// Make new user
+
 router.post("/users", function(req, res, next) {
   var user = new User();
 
@@ -18,6 +20,8 @@ router.post("/users", function(req, res, next) {
     })
     .catch(next);
 });
+
+// Login
 
 router.post("/users/login", function(req, res, next) {
   if (!req.body.user.email) {
@@ -42,7 +46,9 @@ router.post("/users/login", function(req, res, next) {
   })(req, res, next);
 });
 
-router.get("/user", auth.required, function(req, res, next) {
+//! Disable Auth before sharing API
+
+router.get("/user", auth.optional, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -54,7 +60,10 @@ router.get("/user", auth.required, function(req, res, next) {
     .catch(next);
 });
 
-router.put("/user", auth.required, function(req, res, next) {
+//! Disable Auth before sharing API
+
+// Updating User
+router.put("/user", auth.optional, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -85,20 +94,7 @@ router.put("/user", auth.required, function(req, res, next) {
     .catch(next);
 });
 
-module.exports = router;
+//! Clean DB
+// User.collection.drop();
 
-// const createUser = () => {
-//   return fetch("http://localhost:3000/users", {
-//     method: "POST",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify({
-//       user: {
-//         email: "jake@jake.jake",
-//         password: "jakejake"
-//       }
-//     })
-//   }).then(resp => resp.json());
-// };
+module.exports = router;
