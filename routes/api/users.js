@@ -48,7 +48,7 @@ router.post("/users/login", function(req, res, next) {
 
 //! Disable Auth before sharing API
 
-router.get("/user", auth.required, function(req, res, next) {
+router.get("/user", auth.optional, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -63,7 +63,7 @@ router.get("/user", auth.required, function(req, res, next) {
 //! Disable Auth before sharing API
 
 // Updating User
-router.put("/user", auth.required, function(req, res, next) {
+router.put("/user", auth.optional, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
@@ -93,5 +93,8 @@ router.put("/user", auth.required, function(req, res, next) {
     })
     .catch(next);
 });
+
+//! Clean DB
+// User.collection.drop();
 
 module.exports = router;

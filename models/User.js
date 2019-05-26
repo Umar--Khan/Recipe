@@ -82,7 +82,7 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     username: this.username,
     bio: this.bio,
     image: this.image || "http://i.imgur.com/AItCxSs.jpg",
-    following: false // we'll implement following functionality in a few chapters :)
+    following: false // we'll implement following functionality
   };
 };
 
