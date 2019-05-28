@@ -10,6 +10,8 @@ const fs = require("fs"),
   errorhandler = require("errorhandler"),
   mongoose = require("mongoose");
 
+const mongoConnect = require("./db/database");
+
 const isProduction = process.env.NODE_ENV === "production";
 
 // Create global app object
@@ -38,12 +40,43 @@ if (!isProduction) {
   app.use(errorhandler());
 }
 
-if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
-} else {
-  mongoose.connect("mongodb://localhost/conduit");
-  mongoose.set("debug", true);
-}
+// if (isProduction) {
+//   mongoose.connect(process.env.MONGODB_URI);
+// } else {
+//   mongoose.connect("mongodb://localhost/conduit");
+//   mongoose.set("debug", true);
+// }
+
+mongoose
+  .connect(
+    "mongodb+srv://UmarKhan:2bnHHNLDIW37zufm@recipecluster-r6cjr.mongodb.net/test?retryWrites=true",
+    { useNewUrlParser: true }
+  )
+  .then(result => {
+    console.log("connected");
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+// mongoose
+//   .connect(
+//     `mongodb://${process.env.MONGOUSER}:${
+//       process.env.MONGOPASSWORD
+//     }@recipecluster-shard-00-00-r6cjr.mongodb.net:27017,recipecluster-shard-00-01-r6cjr.mongodb.net:27017,recipecluster-shard-00-02-r6cjr.mongodb.net:27017/test?retryWrites=true`,
+//     {
+//       useNewUrlParser: true
+//     },
+//     function(error) {
+//       console.log(error);
+//     }
+//   )
+//   .then(result => {
+//     console.log("connected");
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   });
 
 //Add Models here
 require("./models/User");
