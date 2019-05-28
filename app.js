@@ -59,25 +59,6 @@ mongoose
     console.log(err);
   });
 
-// mongoose
-//   .connect(
-//     `mongodb://${process.env.MONGOUSER}:${
-//       process.env.MONGOPASSWORD
-//     }@recipecluster-shard-00-00-r6cjr.mongodb.net:27017,recipecluster-shard-00-01-r6cjr.mongodb.net:27017,recipecluster-shard-00-02-r6cjr.mongodb.net:27017/test?retryWrites=true`,
-//     {
-//       useNewUrlParser: true
-//     },
-//     function(error) {
-//       console.log(error);
-//     }
-//   )
-//   .then(result => {
-//     console.log("connected");
-//   })
-//   .catch(err => {
-//     console.log(err);
-//   });
-
 //Add Models here
 require("./models/User");
 require("./models/Recipe");

@@ -1,7 +1,5 @@
 const url = require("url");
 const uri = "mongodb://UmarKhan:2bnHHNLDIW37zufm@localhost:27017/cli";
-// const uri =
-//   "mongodb+srv://UmarKhan:2bnHHNLDIW37zufm@recipecluster-r6cjr.mongodb.net/test?retryWrites=true";
 
 if (!uri) {
   throw new Error(
