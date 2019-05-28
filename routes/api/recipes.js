@@ -56,17 +56,21 @@ router.get("/:recipe", function(req, res, next) {
 //     .catch(next);
 // });
 
-router.get("/search/:search", function(req, res) {});
-
-// model.find({
-//   '_id': { $in: [
-//       mongoose.Types.ObjectId('4ed3ede8844f0f351100000c'),
-//       mongoose.Types.ObjectId('4ed3f117a844e0471100000d'),
-//       mongoose.Types.ObjectId('4ed3f18132f50c491100000e')
-//   ]}
-// }, function(err, docs){
-//    console.log(docs);
-// });
+router.get("/search/:search", function(req, res) {
+  Recipe.find(
+    {
+      strIngredient1: { $in: req.params.search }
+    },
+    function(err, results) {
+      if (!err) {
+        const finalResults = results.map(result => result.toJSONFor());
+        res.json({ recipes: results });
+      } else {
+        throw err;
+      }
+    }
+  );
+});
 
 //! Clean DB
 // Recipe.collection.drop();

@@ -1,3 +1,22 @@
+// const getFromApi = () => {
+//   return fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+//     .then(resp => resp.json())
+//     .then(data =>
+//       fetch("http://localhost:3000/api/recipes/", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(convertOutput(data))
+//       }).then(resp => resp.json())
+//     );
+// };
+
+for (let i = 0; i < 10; i++) {
+  getFromApi();
+}
+
+//! Not sure if the the above will work
 const getFromApi = () => {
   return fetch("https://www.themealdb.com/api/json/v1/1/random.php")
     .then(resp => resp.json())
@@ -5,39 +24,20 @@ const getFromApi = () => {
       fetch("http://localhost:3000/api/recipes/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "User-Agent": "PostmanRuntime/7.13.0",
+          Accept: "*/*",
+          "Cache-Control": "no-cache",
+          "Postman-Token": "34fce84a-24cd-4d88-9831-7419ec29d89a",
+          Host: "www.themealdb.com",
+          cookie: "__cfduid=da418e97965fa0c1f592e17b516e0b44c1558626641",
+          "accept-encoding": "gzip, deflate",
+          Connection: "keep-alive"
         },
         body: JSON.stringify(convertOutput(data))
       }).then(resp => resp.json())
     );
 };
-
-for (let i = 0; i < 10; i++) {
-  getFromApi();
-}
-
-//! Not sure if the the above will work
-// const getFromApi = () => {
-//     return fetch("https://www.themealdb.com/api/json/v1/1/random.php")
-//       .then(resp => resp.json())
-//       .then(data =>
-//         fetch("http://localhost:3000/api/recipes/", {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//   "User-Agent" : "PostmanRuntime/7.13.0",
-//   "Accept" : "*/*",
-//   "Cache-Control":"no-cache",
-//   "Postman-Token":"34fce84a-24cd-4d88-9831-7419ec29d89a",
-//   "Host": "www.themealdb.com",
-//   "cookie":"__cfduid=da418e97965fa0c1f592e17b516e0b44c1558626641",
-//   "accept-encoding":"gzip, deflate",
-//   "Connection":"keep-alive"
-//           },
-//           body: JSON.stringify(convertOutput(data))
-//         }).then(resp => resp.json())
-//       );
-//   };
 
 const convertOutput = ({ meals }) => {
   const data = meals[0];
