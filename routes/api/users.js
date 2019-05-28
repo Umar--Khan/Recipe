@@ -5,7 +5,6 @@ var User = mongoose.model("User");
 var auth = require("../auth");
 
 // Make new user
-
 router.post("/users", function(req, res, next) {
   var user = new User();
 
@@ -22,8 +21,7 @@ router.post("/users", function(req, res, next) {
 });
 
 // Login
-
-router.post("/users/login", function(req, res, next) {
+router.post("/users/login", auth.optional, function(req, res, next) {
   if (!req.body.user.email) {
     return res.status(422).json({ errors: { email: "can't be blank" } });
   }
@@ -47,7 +45,6 @@ router.post("/users/login", function(req, res, next) {
 });
 
 //! Disable Auth before sharing API
-
 router.get("/user", auth.optional, function(req, res, next) {
   User.findById(req.payload.id)
     .then(function(user) {

@@ -26,7 +26,8 @@ const UserSchema = new mongoose.Schema(
     bio: String,
     image: String,
     hash: String,
-    salt: String
+    salt: String,
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recipe" }]
   },
   { timestamps: true }
 );
@@ -79,11 +80,34 @@ UserSchema.methods.toAuthJSON = function() {
 // Profile Page output
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
+    _id: this._id,
     username: this.username,
     bio: this.bio,
     image: this.image || "http://i.imgur.com/AItCxSs.jpg",
     following: false // we'll implement following functionality
   };
+};
+
+// Favoriting
+UserSchema.methods.favorite = function(id) {
+  if (this.favorites.indexOf(id) === -1) {
+    this.favorites.push(id);
+  }
+
+  return this.save();
+};
+
+//Unfavoriting
+UserSchema.methods.unfavorite = function(id) {
+  this.favorites.remove(id);
+  return this.save();
+};
+
+//Check for favorting
+UserSchema.methods.isFavorite = function(id) {
+  return this.favorites.some(function(favoriteId) {
+    return favoriteId.toString() === id.toString();
+  });
 };
 
 mongoose.model("User", UserSchema);

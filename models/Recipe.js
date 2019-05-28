@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const User = mongoose.model("User");
 
 const RecipeSchema = new mongoose.Schema({
   idMeal: { type: Number, index: true, unique: true },
@@ -65,6 +66,7 @@ const randomMultiple = (min, max, multiple) => {
 
 RecipeSchema.methods.toJSONFor = function() {
   return {
+    _id: this._id,
     idMeal: this.idMeal,
     strMeal: this.strMeal,
     strCategory: this.strCategory,
@@ -120,6 +122,16 @@ RecipeSchema.methods.toJSONFor = function() {
       this.strMeasure20
     ]
   };
+};
+
+RecipeSchema.methods.updateFavoriteCount = function() {
+  const recipe = this;
+
+  return User.count({ favorites: { $in: [recipe._id] } }).then(function(count) {
+    recipe.favoritesCount = count;
+
+    return recipe.save();
+  });
 };
 
 mongoose.model("Recipe", RecipeSchema);
