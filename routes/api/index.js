@@ -1,8 +1,8 @@
 var router = require("express").Router();
 
 router.use("/", require("./users"));
-// router.use("/profiles", require("./profiles"));
 router.use("/recipes", require("./recipes"));
+router.use("/profiles", require("./profiles"));
 
 // Error Handling
 router.use(function(err, req, res, next) {

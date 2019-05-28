@@ -1,9 +1,7 @@
-var router = require("express").Router();
-var mongoose = require("mongoose");
-var User = mongoose.model("User");
-var auth = require("../auth");
-
-router.use("/profiles", require("./profiles"));
+const router = require("express").Router();
+const mongoose = require("mongoose");
+const User = mongoose.model("User");
+const auth = require("../auth");
 
 router.param("username", function(req, res, next, username) {
   User.findOne({ username: username })
@@ -23,13 +21,12 @@ router.get("/:username", auth.optional, function(req, res, next) {
   if (req.payload) {
     User.findById(req.payload.id).then(function(user) {
       if (!user) {
-        return res.json({ profile: req.profile.toProfileJSONFor(false) });
+        return res.json({ user: req.profile.toProfileJSONFor(false) });
       }
-
-      return res.json({ profile: req.profile.toProfileJSONFor(user) });
+      return res.json({ user: req.profile.toProfileJSONFor(user) });
     });
   } else {
-    return res.json({ profile: req.profile.toProfileJSONFor(false) });
+    return res.json({ user: req.profile.toProfileJSONFor(false) });
   }
 });
 

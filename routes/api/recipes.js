@@ -15,8 +15,8 @@ router.post("/", function(req, res, next) {
     .catch(next);
 });
 
-router.param("recipe", function(req, res, next, idMeal) {
-  Recipe.findOne({ idMeal: idMeal })
+router.param("recipe", function(req, res, next, _id) {
+  Recipe.findOne({ _id: _id })
     .populate("recipe")
     .then(function(recipe) {
       if (!recipe) {
@@ -40,31 +40,31 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:recipe", function(req, res, next) {
+  console.log(req.recipe);
   return res.json({ recipe: req.recipe.toJSONFor() });
 });
 
-// router.param("search", function(req, res, next, search) {
-//   Recipe.find({ strCategory: search })
-//     .populate("recipe")
-//     .then(function(recipe) {
-//       if (!recipe) {
-//         return res.sendStatus(404);
-//       }
-//       req.recipe = recipe;
-//       return next();
-//     })
-//     .catch(next);
-// });
+// Filtering
 
 router.get("/search/:search", function(req, res) {
+  let search = req.params.search;
+  if (search.includes("&")) {
+    search = search.toLowerCase().split("&");
+  } else {
+    search = search.toLowerCase();
+  }
+
+  console.log(search);
+
   Recipe.find(
     {
-      strIngredient1: { $in: req.params.search }
+      IngredientsArr: { $in: search }
     },
     function(err, results) {
+      console.log(results);
       if (!err) {
         const finalResults = results.map(result => result.toJSONFor());
-        res.json({ recipes: results });
+        res.json({ recipes: finalResults });
       } else {
         throw err;
       }
@@ -72,7 +72,43 @@ router.get("/search/:search", function(req, res) {
   );
 });
 
+//Favourte an recipe
+router.post("/:recipe/favorite", auth.optional, function(req, res, next) {
+  const recipeId = req.recipe._id;
+  User.findById(req.payload.id)
+    .then(function(user) {
+      if (!user) {
+        return res.sendStatus(401);
+      }
+      return user.favorite(recipeId).then(function() {
+        return req.recipe.updateFavoriteCount().then(function(recipe) {
+          return res.json({ recipe: recipe.toJSONFor(user) });
+        });
+      });
+    })
+    .catch(next);
+});
+
+// Unfavorite an recipe
+router.delete("/:recipe/favorite", auth.optional, function(req, res, next) {
+  const recipeId = req.recipe._id;
+
+  User.findById(req.payload.id)
+    .then(function(user) {
+      if (!user) {
+        return res.sendStatus(401);
+      }
+
+      return user.unfavorite(recipeId).then(function() {
+        return req.recipe.updateFavoriteCount().then(function(recipe) {
+          return res.json({ recipe: recipe.toJSONFor(user) });
+        });
+      });
+    })
+    .catch(next);
+});
+
 //! Clean DB
-// Recipe.collection.drop();
+Recipe.collection.drop();
 
 module.exports = router;

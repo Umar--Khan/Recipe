@@ -66,12 +66,14 @@ UserSchema.methods.generateJWT = function() {
   );
 };
 
-// Check token
+// Creates User response
 UserSchema.methods.toAuthJSON = function() {
   return {
+    _id: this._id,
     username: this.username,
     email: this.email,
     token: this.generateJWT(),
+    favorites: this.favorites,
     bio: this.bio,
     image: this.image
   };
@@ -80,11 +82,13 @@ UserSchema.methods.toAuthJSON = function() {
 // Profile Page output
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
-    _id: this._id,
+    user_id: this._id,
     username: this.username,
+    email: this.email,
     bio: this.bio,
     image: this.image || "http://i.imgur.com/AItCxSs.jpg",
-    following: false // we'll implement following functionality
+    favorites: this.favorites
+    // following: false // we'll implement following functionality
   };
 };
 
