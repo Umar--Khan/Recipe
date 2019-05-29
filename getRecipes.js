@@ -45,7 +45,9 @@ const convertOutput = ({ meals }) => {
       data.strIngredient19,
       data.strIngredient20
     ];
-    ingredients = ingredients.map(ing => ing.toLowerCase());
+    ingredients = ingredients.map(ing =>
+      ing ? ing.toLowerCase() : (ing = "")
+    );
     return ingredients;
   };
 
