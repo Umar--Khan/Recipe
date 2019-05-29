@@ -27,7 +27,8 @@ const UserSchema = new mongoose.Schema(
     image: String,
     hash: String,
     salt: String,
-    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recipe" }]
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recipe" }],
+    recipesArr: []
   },
   { timestamps: true }
 );
@@ -82,15 +83,16 @@ UserSchema.methods.toAuthJSON = function() {
 // Profile Page output
 UserSchema.methods.toProfileJSONFor = function(user) {
   return {
-    user_id: this._id,
+    _id: this._id,
     username: this.username,
     email: this.email,
     bio: this.bio,
     image: this.image || "http://i.imgur.com/AItCxSs.jpg",
     favorites: this.favorites
-    // following: false // we'll implement following functionality
   };
 };
+
+// UserSchema.methods.populateRecipes = function() {};
 
 // Favoriting
 UserSchema.methods.favorite = function(id) {

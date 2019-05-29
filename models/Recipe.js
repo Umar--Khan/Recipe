@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const User = mongoose.model("User");
-var _ = require("lodash");
+const _ = require("lodash");
 
 const RecipeSchema = new mongoose.Schema({
   idMeal: { type: Number, index: true, unique: true },
@@ -53,7 +53,7 @@ RecipeSchema.methods.toJSONFor = function(user) {
     strSource: this.strSource,
     time: randomMultiple(10, 60, 5),
     IngredientsArr: titleCase(this.IngredientsArr),
-    MeasurementsArr: checkforNull(this.MeasurementsArr),
+    MeasurementsArr: this.MeasurementsArr,
     favoritesCount: this.favoritesCount
   };
 };
