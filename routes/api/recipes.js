@@ -109,6 +109,6 @@ router.delete("/:recipe/favorite", auth.optional, function(req, res, next) {
 });
 
 //! Clean DB
-Recipe.collection.drop();
+// Recipe.collection.drop();
 
 module.exports = router;
