@@ -88,24 +88,36 @@ UserSchema.methods.toProfileJSONFor = function(user) {
     email: this.email,
     bio: this.bio,
     image: this.image || "http://i.imgur.com/AItCxSs.jpg",
-    favorites: this.favorites
+    favorites: this.favorites,
+    recipesArr: this.recipesArr
   };
 };
 
-// UserSchema.methods.populateRecipes = function() {};
-
 // Favoriting
-UserSchema.methods.favorite = function(id) {
+UserSchema.methods.favorite = function(id, recipe) {
   if (this.favorites.indexOf(id) === -1) {
     this.favorites.push(id);
   }
+
+  // if (this.recipesArr[0].recipe._id.indexOf(id) === -1) {
+  //   this.recipesArr.push({ recipe: recipe });
+  // }
+
+  // const checkRecipe = this.recipesArr.filter(
+  //   recipeSingle => recipeSingle.recipe._id === recipe._id
+  // );
+
+  // if (!checkRecipe) {
+  //   this.recipesArr.push({ recipe: recipe });
+  // }
 
   return this.save();
 };
 
 //Unfavoriting
-UserSchema.methods.unfavorite = function(id) {
+UserSchema.methods.unfavorite = function(id, recipe) {
   this.favorites.remove(id);
+  this.recipesArr.remove(recipe);
   return this.save();
 };
 

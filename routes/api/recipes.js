@@ -39,26 +39,26 @@ router.get("/", function(req, res, next) {
   });
 });
 
-router.get("/:recipe", function(req, res, next) {
-  console.log(req.recipe);
-  return res.json({ recipe: req.recipe.toJSONFor() });
-});
-
 // Filtering
 
-router.get("/search/:search", function(req, res) {
-  let search = req.params.search;
-  if (search.includes("&")) {
-    search = search.toLowerCase().split("&");
-  } else {
-    search = search.toLowerCase();
+router.get("/search", function(req, res) {
+  let search = req.query.q;
+  let time = 61;
+  if (search) {
+    search = search.toLowerCase().split(",");
   }
 
-  console.log(search);
+  if (req.query.time) {
+    time = req.query.time;
+  }
+  time = parseInt(time);
+  console.log(time, search);
+  console.log(req.query);
 
   Recipe.find(
     {
-      IngredientsArr: { $in: search }
+      IngredientsArr: { $all: search },
+      time: { $lte: time }
     },
     function(err, results) {
       console.log(results);
@@ -72,15 +72,26 @@ router.get("/search/:search", function(req, res) {
   );
 });
 
+router.get("/:recipe", function(req, res, next) {
+  console.log(req.recipe);
+  return res.json({ recipe: req.recipe.toJSONFor() });
+});
+
 //Favourte an recipe
 router.post("/:recipe/favorite", auth.optional, function(req, res, next) {
   const recipeId = req.recipe._id;
+  let recipe = [];
+
+  Recipe.findById(recipeId).then(function(foundrecipe) {
+    recipe = foundrecipe;
+  });
+
   User.findById(req.payload.id)
     .then(function(user) {
       if (!user) {
         return res.sendStatus(401);
       }
-      return user.favorite(recipeId).then(function() {
+      return user.favorite(recipeId, recipe).then(function() {
         return req.recipe.updateFavoriteCount().then(function(recipe) {
           return res.json({ recipe: recipe.toJSONFor(user) });
         });
@@ -92,6 +103,11 @@ router.post("/:recipe/favorite", auth.optional, function(req, res, next) {
 // Unfavorite an recipe
 router.delete("/:recipe/favorite", auth.optional, function(req, res, next) {
   const recipeId = req.recipe._id;
+  let recipe = [];
+
+  Recipe.findById(recipeId).then(function(foundrecipe) {
+    recipe = foundrecipe;
+  });
 
   User.findById(req.payload.id)
     .then(function(user) {
@@ -99,7 +115,7 @@ router.delete("/:recipe/favorite", auth.optional, function(req, res, next) {
         return res.sendStatus(401);
       }
 
-      return user.unfavorite(recipeId).then(function() {
+      return user.unfavorite(recipeId, recipe).then(function() {
         return req.recipe.updateFavoriteCount().then(function(recipe) {
           return res.json({ recipe: recipe.toJSONFor(user) });
         });

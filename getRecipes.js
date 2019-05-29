@@ -20,6 +20,12 @@ const getFromApi = () => {
     );
 };
 
+const randomMultiple = (min, max, multiple) => {
+  return (
+    Math.floor(Math.random() * ((max - min) / multiple + 1)) * multiple + min
+  );
+};
+
 const convertOutput = ({ meals }) => {
   const data = meals[0];
   const lowerCaseIng = () => {
@@ -62,6 +68,7 @@ const convertOutput = ({ meals }) => {
       strTags: data.strTags,
       strYoutube: data.strYoutube,
       IngredientsArr: lowerCaseIng(),
+      time: randomMultiple(10, 60, 5),
       MeasurementsArr: [
         data.strMeasure1,
         data.strMeasure2,

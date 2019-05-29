@@ -14,16 +14,11 @@ const RecipeSchema = new mongoose.Schema({
   strYoutube: String,
   IngredientsArr: Array,
   MeasurementsArr: Array,
-  strSource: String
+  strSource: String,
+  time: Number
 });
 
 RecipeSchema.plugin(uniqueValidator, { message: "can't be same ID" });
-
-const randomMultiple = (min, max, multiple) => {
-  return (
-    Math.floor(Math.random() * ((max - min) / multiple + 1)) * multiple + min
-  );
-};
 
 const titleCase = arr => {
   splitStr = arr.map(test => (test ? _.startCase(test) : (test = "")));
@@ -51,7 +46,7 @@ RecipeSchema.methods.toJSONFor = function(user) {
     strTags: checkforNull(this.strTags),
     strYoutube: this.strYoutube,
     strSource: this.strSource,
-    time: randomMultiple(10, 60, 5),
+    time: this.time,
     IngredientsArr: titleCase(this.IngredientsArr),
     MeasurementsArr: this.MeasurementsArr,
     favoritesCount: this.favoritesCount
