@@ -97,20 +97,12 @@ const convertOutput = ({ meals }) => {
   return hash;
 };
 
-for (let i = 0; i < 10; i++) {
-  getFromApi();
-}
+// Copy everything above and paste it into chrome
 
-// const token = localStorage.getItem("token");
+const runGetrecipes = (number = 10) => {
+  for (let i = 0; i < number; i++) {
+    getFromApi();
+  }
+};
 
-// const signout = () => {
-//   this.setState({ username: "" });
-//   localStorage.removeItem("token");
-// };
-
-// const signin = (username, token) => {
-//   localStorage.setItem("token", token);
-//   this.setState({ username }, () => {
-//     this.props.history.push("/inventory");
-//   });
-// };
+runGetrecipes(); // Can provide arg to get more recipes at a time

@@ -45,7 +45,7 @@ UserSchema.methods.setPassword = function(password) {
 
 // Checking password
 UserSchema.methods.validPassword = function(password) {
-  var hash = crypto
+  const hash = crypto
     .pbkdf2Sync(password, this.salt, 10000, 512, "sha512")
     .toString("hex");
   return this.hash === hash;
@@ -53,8 +53,8 @@ UserSchema.methods.validPassword = function(password) {
 
 // Genreate a JWT token
 UserSchema.methods.generateJWT = function() {
-  var today = new Date();
-  var exp = new Date(today);
+  const today = new Date();
+  const exp = new Date(today);
   exp.setDate(today.getDate() + 60);
 
   return jwt.sign(

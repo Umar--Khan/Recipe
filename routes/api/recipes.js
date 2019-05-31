@@ -52,8 +52,6 @@ router.get("/search", function(req, res) {
     time = req.query.time;
   }
   time = parseInt(time);
-  console.log(time, search);
-  console.log(req.query);
 
   Recipe.find(
     {
@@ -61,7 +59,6 @@ router.get("/search", function(req, res) {
       time: { $lte: time }
     },
     function(err, results) {
-      console.log(results);
       if (!err) {
         const finalResults = results.map(result => result.toJSONFor());
         res.json({ recipes: finalResults });
