@@ -6,7 +6,7 @@ The repo for that can be found here:
 
 https://github.com/keoki33/recipes_project
 
-To view API ```npm run dev``` 
+To view API JSON results ```npm run dev``` 
 
 All recipes ```localhost:3000/api/recipes```
 
