@@ -13,4 +13,3 @@ All recipes ```localhost:3000/api/recipes```
 Query ingredients ```localhost:3000/api/recipes/search?q=chicken```
 
 Query multiple ingredients with time ```http://localhost:3000/api/recipes/search?q=chicken,garlic&time=45```
-
